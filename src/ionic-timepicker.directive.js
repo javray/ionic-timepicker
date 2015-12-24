@@ -24,12 +24,16 @@
         scope.inputEpochTime = scope.inputObj.inputEpochTime ? scope.inputObj.inputEpochTime : currentEpoch;
         scope.step = scope.inputObj.step ? scope.inputObj.step : 15;
         scope.format = scope.inputObj.format ? scope.inputObj.format : 24;
+        scope.utc = typeof(scope.inputObj.utc) !== 'undefined' ? scope.inputObj.utc : true;
         scope.titleLabel = scope.inputObj.titleLabel ? scope.inputObj.titleLabel : 'Time Picker';
         scope.setLabel = scope.inputObj.setLabel ? scope.inputObj.setLabel : 'Set';
         scope.closeLabel = scope.inputObj.closeLabel ? scope.inputObj.closeLabel : 'Close';
         scope.setButtonType = scope.inputObj.setButtonType ? scope.inputObj.setButtonType : 'button-positive';
         scope.closeButtonType = scope.inputObj.closeButtonType ? scope.inputObj.closeButtonType : 'button-stable';
-
+        
+        scope.getHours = scope.utc ? 'getUTCHours' : 'getHours';
+        scope.getMinutes = scope.utc ? 'getUTCMinutes' : 'getMinutes';
+        
         var obj = {epochTime: scope.inputEpochTime, step: scope.step, format: scope.format};
         scope.time = {hours: 0, minutes: 0, meridian: ""};
         var objDate = new Date(obj.epochTime * 1000);       // Epoch time in milliseconds.
@@ -94,9 +98,9 @@
           }
 
           if (obj.format == 12) {
-            scope.time.meridian = (objDate.getUTCHours() >= 12) ? "PM" : "AM";
-            scope.time.hours = (objDate.getUTCHours() > 12) ? ((objDate.getUTCHours() - 12)) : (objDate.getUTCHours());
-            scope.time.minutes = (objDate.getUTCMinutes());
+            scope.time.meridian = (objDate[scope.getHours]() >= 12) ? "PM" : "AM";
+            scope.time.hours = (objDate[scope.getHours]() > 12) ? ((objDate[scope.getHours]() - 12)) : (objDate[scope.getHours]());
+            scope.time.minutes = (objDate[scope.getMinutes]());
 
             scope.time.hours = (scope.time.hours < 10) ? ("0" + scope.time.hours) : (scope.time.hours);
             scope.time.minutes = (scope.time.minutes < 10) ? ("0" + scope.time.minutes) : (scope.time.minutes);
@@ -146,8 +150,8 @@
 
           } else if (obj.format == 24) {
 
-            scope.time.hours = (objDate.getUTCHours());
-            scope.time.minutes = (objDate.getUTCMinutes());
+            scope.time.hours = (objDate[scope.getHours]());
+            scope.time.minutes = (objDate[scope.getMinutes]());
 
             scope.time.hours = (scope.time.hours < 10) ? ("0" + scope.time.hours) : (scope.time.hours);
             scope.time.minutes = (scope.time.minutes < 10) ? ("0" + scope.time.minutes) : (scope.time.minutes);
